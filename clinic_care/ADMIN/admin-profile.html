@@ -1,0 +1,129 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<title>CliniCare — Admin Profile</title>
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+<style>
+:root{
+  --bg:#f5f8fb;--card:#fff;--primary:#1f4e79;--accent:#2a6fb0;
+  --muted:#6b7280;--radius:12px;--container:900px;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:'Poppins',system-ui; background:var(--bg); color:#111827}
+
+/* top nav */
+.topnav{background:linear-gradient(90deg,var(--primary),var(--accent));color:#fff;padding:12px 18px;position:sticky;top:0;z-index:50;box-shadow:0 6px 18px rgba(31,78,121,.12)}
+.nav-inner{max-width:var(--container);margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:700}
+.brand-mark{width:30px;height:30px;border-radius:6px;background:#fff;color:var(--primary);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px}
+.nav-links a{color:rgba(255,255,255,.92);text-decoration:none;margin:0 6px;padding:8px 10px;border-radius:8px}
+.nav-links a:hover{background:rgba(255,255,255,.12)}
+.profile{display:flex;align-items:center;gap:10px;cursor:pointer;position:relative}
+.avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,.9)}
+.name{font-weight:600}
+.caret{color:rgba(255,255,255,.85);transition:transform .25s}
+.profile-dropdown{position:absolute;top:48px;right:0;width:180px;background:#fff;border-radius:10px;box-shadow:0 8px 24px rgba(0,0,0,.12);list-style:none;padding:6px 0;opacity:0;pointer-events:none;transform:translateY(-8px);transition:all .22s}
+.profile-dropdown.show{opacity:1;pointer-events:auto;transform:translateY(0)}
+.profile-dropdown li a{display:flex;gap:10px;padding:12px;color:#333;text-decoration:none;font-weight:500}
+.profile-dropdown li a.logout{color:#b91c1c}
+
+/* profile section */
+.container{max-width:var(--container);margin:30px auto;padding:0 16px}
+.card{background:var(--card);border-radius:var(--radius);padding:22px;box-shadow:0 8px 24px rgba(20,30,50,.06)}
+h2{color:var(--primary);margin-bottom:18px}
+.profile-header{display:flex;gap:18px;align-items:center;margin-bottom:18px}
+.profile-header img{width:100px;height:100px;border-radius:50%;object-fit:cover;border:3px solid var(--accent)}
+.profile-header div strong{display:block;font-size:1.4rem;color:var(--primary)}
+.profile-header small{color:var(--muted)}
+form{display:grid;grid-template-columns:1fr 1fr;gap:14px}
+label{display:block;margin-bottom:6px;font-weight:600;color:var(--primary)}
+input,textarea{width:100%;padding:12px;border-radius:10px;border:1px solid #e6eef6;font-size:15px}
+textarea{resize:none;min-height:100px}
+.full{grid-column:1 / -1}
+button{padding:10px 16px;border-radius:10px;border:0;font-weight:700;cursor:pointer}
+.save-btn{background:var(--primary);color:#fff}
+.save-btn:hover{background:var(--accent)}
+.back-link{display:inline-flex;align-items:center;gap:8px;color:var(--primary);text-decoration:none;font-weight:600;margin-bottom:12px}
+.back-link:hover{text-decoration:underline}
+@media(max-width:700px){form{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<header class="topnav">
+  <div class="nav-inner">
+    <div class="brand"><div class="brand-mark">+</div><div>CliniCare</div></div>
+    <div class="nav-links">
+      <a href="admin.html">Dashboard</a>
+      <a href="profile.html" style="background:rgba(255,255,255,.18);font-weight:600">Profile</a>
+    </div>
+    <div class="profile" id="profileMenu">
+      <img src="/Users/sandy/Downloads/clinic_care/PICTURES/d6f7040848c96a34966b9614e687effd.jpg" class="avatar" alt="">
+      <span class="name">Admin John</span>
+      <i class="fa-solid fa-chevron-down caret"></i>
+      <ul class="profile-dropdown" id="profileDropdown">
+        <li><a href="admin-profile.html"><i class="fa-solid fa-user"></i> Profile</a></li>
+        <li><a href="../index.html" class="logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a></li>
+      </ul>
+    </div>
+  </div>
+</header>
+
+<main class="container">
+  <a href="admin.html" class="back-link"><i class="fa-solid fa-arrow-left"></i> Back to Dashboard</a>
+
+  <section class="card">
+    <h2>Admin Profile</h2>
+    <div class="profile-header">
+      <img src="/Users/sandy/Downloads/clinic_care/PICTURES/d6f7040848c96a34966b9614e687effd.jpg" alt="">
+      <div>
+        <strong>Admin</strong>
+        <small>System Administrator</small>
+      </div>
+    </div>
+
+    <form id="profileForm">
+      <div>
+        <label>Full Name</label>
+        <input type="text" id="name" placeholder="Jane">
+      </div>
+      <div>
+        <label>Email</label>
+        <input type="email" id="email" placeholder="admin@clinicare.com">
+      </div>
+      <div>
+        <label>Username</label>
+        <input type="text" id="username" placeholder="adminjane">
+      </div>
+      <div>
+        <label>Phone</label>
+        <input type="text" id="phone" placeholder="+63 912 345 6789">
+      </div>
+      <div class="full">
+        <label>Bio / Notes</label>
+        <input type="text" id="text" placeholder="">
+      </div>
+      <div class="full" style="display:flex;justify-content:flex-end">
+        <button type="submit" class="save-btn"><i class="fa-solid fa-save"></i> Save Changes</button>
+      </div>
+    </form>
+  </section>
+</main>
+
+<script>
+const menu=document.getElementById("profileMenu"),dropdown=document.getElementById("profileDropdown"),caret=menu.querySelector(".caret");
+menu.addEventListener("click",e=>{e.stopPropagation();dropdown.classList.toggle("show");caret.style.transform=dropdown.classList.contains("show")?"rotate(180deg)":"rotate(0deg)"});
+document.addEventListener("click",()=>{dropdown.classList.remove("show");caret.style.transform="rotate(0deg)"});
+document.querySelector(".logout").addEventListener("click",e=>{e.preventDefault();alert("Logged out (demo)")});
+
+document.getElementById("profileForm").addEventListener("submit",e=>{
+  e.preventDefault();
+  alert("Profile updated successfully (frontend demo)");
+});
+</script>
+</body>
+</html>

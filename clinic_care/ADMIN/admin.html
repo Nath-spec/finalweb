@@ -1,0 +1,751 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CliniCare — Admin Dashboard</title>
+
+  <!-- Font Awesome + Poppins -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <style>
+    /* ===== base / theme (matches your patient.css variables) ===== */
+    :root{
+      --bg: #f5f8fb;
+      --card: #ffffff;
+      --primary: #1f4e79; /* dark blue */
+      --accent: #2a6fb0;
+      --muted: #6b7280;
+      --radius: 12px;
+      --container: 1100px;
+    }
+    *{box-sizing:border-box;margin:0;padding:0}
+    html,body{height:100%}
+    body{
+      font-family:'Poppins',system-ui,-apple-system,Segoe UI,Roboto,"Helvetica Neue",Arial;
+      background:var(--bg);
+      color:#111827;
+      -webkit-font-smoothing:antialiased;
+      -moz-osx-font-smoothing:grayscale;
+    }
+
+    /* ===== top nav (same look as patient.html) ===== */
+    .topnav{
+      background: linear-gradient(90deg,var(--primary),var(--accent));
+      color:#fff;
+      padding:12px 18px;
+      position:sticky; top:0; z-index:60;
+      box-shadow:0 6px 18px rgba(31,78,121,0.12);
+    }
+    .nav-inner{
+      max-width:var(--container);
+      margin:0 auto;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:16px;
+    }
+    .brand{display:flex;align-items:center;gap:10px;font-weight:700}
+    .brand-mark{
+      width:30px;height:30px;border-radius:6px;background:#fff;color:var(--primary);
+      display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px;
+    }
+    .brand-text{font-size:18px}
+    .nav-links{display:flex;gap:12px;align-items:center}
+    .nav-link{
+      color:rgba(255,255,255,0.92);text-decoration:none;padding:8px 10px;border-radius:8px;transition:all .2s
+    }
+    .nav-link:hover{background:rgba(255,255,255,0.12)}
+    .nav-link.active{background:rgba(255,255,255,0.18);font-weight:600}
+    .nav-right{display:flex;align-items:center;gap:12px}
+
+    /* Profile */
+    .profile{display:flex;align-items:center;gap:10px;cursor:pointer;position:relative}
+    .avatar{width:38px;height:38px;border-radius:50%;object-fit:cover;border:2px solid rgba(255,255,255,0.9)}
+    .name{color:#fff;font-weight:600}
+    .caret{color:rgba(255,255,255,0.85);font-size:12px;transition:transform .25s}
+    .profile-dropdown{
+      position:absolute;top:48px;right:0;width:200px;background:#fff;border-radius:10px;
+      box-shadow:0 8px 24px rgba(0,0,0,0.12);list-style:none;overflow:hidden;padding:6px 0;
+      opacity:0;pointer-events:none;transform:translateY(-8px);transition:all .22s;z-index:99;
+    }
+    .profile-dropdown.show{opacity:1;pointer-events:auto;transform:translateY(0)}
+    .profile-dropdown li a{display:flex;gap:10px;padding:12px;color:#333;text-decoration:none;font-weight:500}
+    .profile-dropdown li a.logout{color:#b91c1c}
+
+    /* ===== main container layout ===== */
+    .container{max-width:var(--container);margin:20px auto;padding:0 18px}
+    .grid{
+      display:grid;
+      grid-template-columns: 220px 1fr;
+      gap:18px;
+      align-items:start;
+    }
+
+    /* left sidebar */
+    .sidebar{
+      position:sticky;top:88px;
+      background:var(--card);border-radius:var(--radius);padding:14px;box-shadow:0 8px 24px rgba(20,30,50,0.06);
+    }
+    .side-item{display:flex;align-items:center;gap:10px;padding:10px;border-radius:10px;cursor:pointer;color:var(--primary);font-weight:600}
+    .side-item:hover{background:#f1f6ff}
+    .side-item.active{background:linear-gradient(90deg,#e8f2ff,#f7fbff);border-left:3px solid var(--accent)}
+    .side-item i{width:26px;text-align:center;color:var(--accent)}
+
+    /* content area cards */
+    .card{background:var(--card);border-radius:var(--radius);padding:18px;box-shadow:0 8px 24px rgba(20,30,50,0.06)}
+    .card-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:12px}
+    .small-link{color:var(--primary);text-decoration:none;font-weight:600}
+
+    /* ===== Dashboard charts ===== */
+    .charts{display:grid;grid-template-columns:1fr 380px;gap:16px;align-items:start}
+    .chart-card{padding:14px;border-radius:12px;background:linear-gradient(180deg,#fff,#fbfdff)}
+    canvas{display:block;width:100%;height:300px;background:transparent}
+
+    /* stats row */
+    .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-top:12px}
+    .stat{padding:14px;border-radius:12px;background:white;box-shadow:0 6px 18px rgba(20,30,50,0.04)}
+    .stat h4{color:var(--primary);margin-bottom:6px}
+    .stat p{font-weight:700;font-size:1.15rem}
+
+    /* ===== Patients & Doctors table ===== */
+    .table{width:100%;border-collapse:collapse}
+    th,td{padding:12px 10px;border-bottom:1px solid #eef3fa;text-align:left;color:var(--muted)}
+    th{color:var(--primary);font-weight:700}
+    .btn{padding:8px 12px;border-radius:8px;border:0;cursor:pointer;font-weight:700}
+    .btn.accept{background:#dcfce7;color:#175d2c}
+    .btn.remove{background:#fee2e2;color:#9b1c1c}
+    .btn.secondary{background:#eef6ff;color:var(--primary)}
+    .action-dropdown{position:relative;display:inline-block}
+    .dropdown-menu{position:absolute;right:0;top:36px;background:#fff;border-radius:8px;box-shadow:0 8px 20px rgba(0,0,0,0.08);min-width:140px;display:none;z-index:50}
+    .dropdown-menu.show{display:block}
+    .dropdown-menu button{display:block;width:100%;padding:10px;border:0;background:transparent;text-align:left;cursor:pointer}
+
+    /* ===== Chat layout inside admin ===== */
+    .chat-wrapper{display:grid;grid-template-columns:260px 1fr;gap:14px;height:540px}
+    .chat-list{background:var(--card);border-radius:12px;padding:10px;overflow:auto}
+    .chat-item{display:flex;gap:10px;align-items:center;padding:8px;border-radius:8px;cursor:pointer}
+    .chat-item:hover{background:#f5f8fb}
+    .chat-item.active{background:#e8f2ff;border-left:3px solid var(--accent)}
+    .chat-area{background:var(--card);border-radius:12px;padding:12px;display:flex;flex-direction:column;overflow:hidden}
+    .chat-box{flex:1;overflow:auto;padding:12px;display:flex;flex-direction:column;gap:10px;background:#f9fbff;border-radius:8px}
+    .msg{max-width:72%;padding:10px;border-radius:12px;position:relative}
+    .msg.admin{background:#eef6ff;align-self:flex-start}
+    .msg.doc{background:#e6fbe7;align-self:flex-end}
+    .msg-time{font-size:11px;color:var(--muted);margin-top:6px}
+
+    .chat-input{display:flex;gap:10px;padding-top:10px}
+    .chat-input input{flex:1;padding:10px;border-radius:10px;border:1px solid #e6eef6}
+    .chat-input button{padding:10px 14px;border-radius:10px;border:0;background:var(--primary);color:#fff}
+
+    /* ===== Appointments ===== */
+    .status-badge{padding:6px 10px;border-radius:999px;font-weight:700}
+    .pending{background:#fff7dd;color:#92400e}
+    .approved{background:#dcfce7;color:#166534}
+    .declined{background:#fee2e2;color:#991b1b}
+
+    /* responsive */
+    @media (max-width:1000px){
+      .grid{grid-template-columns:1fr}
+      .charts{grid-template-columns:1fr}
+      .chat-wrapper{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+
+  <!-- TOP NAV -->
+  <header class="topnav">
+    <div class="nav-inner">
+      <div class="brand">
+        <span class="brand-mark">+</span>
+        <span class="brand-text">CliniCare</span>
+      </div>
+
+      <div class="nav-right">
+        <div style="margin-right:12px;">
+          <button id="darkToggle" class="btn secondary" title="Toggle dark mode"><i class="fa-solid fa-moon"></i></button>
+        </div>
+
+        <div class="profile" id="profileMenu">
+          <img class="avatar" src="/Users/sandy/Downloads/clinic_care/PICTURES/d6f7040848c96a34966b9614e687effd.jpg" alt="Admin">
+          <span class="name">Admin John</span>
+          <i class="fa-solid fa-chevron-down caret"></i>
+
+          <ul class="profile-dropdown" id="profileDropdown">
+            <li><a href="admin-profile.html"><i class="fa-solid fa-user"></i> Profile</a></li>
+            <li><a href="../index.html" class="logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <div class="container">
+    <div class="grid">
+      <!-- SIDEBAR (acts like separate pages) -->
+      <aside class="sidebar" id="sidebar">
+        <div class="side-item active" data-section="dashboard"><i class="fa-solid fa-chart-line"></i> Dashboard</div>
+        <div class="side-item" data-section="manage"><i class="fa-solid fa-users"></i> Patients & Doctors</div>
+        <div class="side-item" data-section="chat"><i class="fa-solid fa-comments"></i> Chat (Admin)</div>
+        <div class="side-item" data-section="appointments"><i class="fa-solid fa-calendar-check"></i> Appointments</div>
+        <hr style="margin:12px 0;border:none;border-top:1px solid #eef3fa" />
+      </aside>
+
+      <!-- CONTENT -->
+      <section id="contentArea">
+        <!-- DASHBOARD -->
+        <div class="card" id="dashboardSection">
+          <div class="card-head">
+            <h3 style="color:var(--primary)">Dashboard — Analytics</h3>
+            <div>
+              <a href="#" class="small-link">Export</a>
+            </div>
+          </div>
+
+          <div class="charts">
+            <div class="chart-card">
+              <h4 style="margin:0 0 8px;color:var(--primary)">Appointments — Past 7 days</h4>
+              <canvas id="barChart" width="800" height="300"></canvas>
+              <div style="margin-top:12px;font-size:13px;color:var(--muted)">Animated bars rising to show appointments per day</div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:12px">
+              <div class="chart-card">
+                <h4 style="margin:0 0 8px;color:var(--primary)">Doctor vs Patients</h4>
+                <canvas id="pieChart" width="380" height="200"></canvas>
+                <div style="margin-top:8px" id="pieLegend"></div>
+              </div>
+
+              <div class="chart-card">
+                <h4 style="margin:0 0 8px;color:var(--primary)">Appointment Trend</h4>
+                <canvas id="lineChart" width="380" height="120"></canvas>
+                <div style="margin-top:8px;font-size:13px;color:var(--muted)">Animated line drawing</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="stats" style="margin-top:16px">
+            <div class="stat"><h4>Total Doctors</h4><p id="statDoctors">24</p></div>
+            <div class="stat"><h4>Total Patients</h4><p id="statPatients">156</p></div>
+            <div class="stat"><h4>Appointments Today</h4><p id="statToday">32</p></div>
+          </div>
+        </div>
+
+        <!-- MANAGEMENT (Patients & Doctors) -->
+        <div class="card" id="manageSection" style="display:none">
+          <div class="card-head">
+            <h3 style="color:var(--primary)">Patients & Doctors Management</h3>
+            <div><a class="small-link" href="#">Bulk Actions</a></div>
+          </div>
+
+          <h4 style="color:var(--primary);margin-bottom:8px">Doctors</h4>
+          <table class="table" id="doctorsTable">
+            <thead>
+              <tr><th>Doctor</th><th>Specialty</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+              <tr data-id="d1">
+                <td>Dr. Maria Santos</td>
+                <td>Family Medicine</td>
+                <td><span class="status-badge approved">Active</span></td>
+                <td>
+                  <button class="btn accept" data-action="accept">Accept</button>
+                  <button class="btn remove" data-action="remove">Remove</button>
+                </td>
+              </tr>
+              <tr data-id="d2">
+                <td>Dr. John Reyes</td>
+                <td>Pediatrics</td>
+                <td><span class="status-badge pending">Pending</span></td>
+                <td>
+                  <button class="btn accept" data-action="accept">Accept</button>
+                  <button class="btn remove" data-action="remove">Remove</button>
+                </td>
+              </tr>
+              <tr data-id="d3">
+                <td>Dr. Anne Cruz</td>
+                <td>Dermatology</td>
+                <td><span class="status-badge approved">Active</span></td>
+                <td>
+                  <button class="btn accept" data-action="accept">Accept</button>
+                  <button class="btn remove" data-action="remove">Remove</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+
+          <hr style="margin:18px 0;border:none;border-top:1px solid #eef3fa" />
+
+          <h4 style="color:var(--primary);margin-bottom:8px">Patients</h4>
+          <table class="table" id="patientsTable">
+            <thead>
+              <tr><th>Patient</th><th>Contact</th><th>Last Visit</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>John Doe</td>
+                <td>+63 912 345 6789</td>
+                <td>Oct 10, 2025</td>
+                <td>
+                  <div class="action-dropdown">
+                    <button class="btn secondary" onclick="toggleDropdown(this)">Actions <i class='fa-solid fa-chevron-down' style='margin-left:8px;font-size:12px;'></i></button>
+                    <div class="dropdown-menu">
+                      <button onclick="viewPatient(this)">View</button>
+                      <button onclick="messagePatient(this)">Message</button>
+                      <button onclick="deletePatient(this)">Remove</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td>Jane Reyes</td>
+                <td>+63 917 222 3333</td>
+                <td>Sep 18, 2025</td>
+                <td>
+                  <div class="action-dropdown">
+                    <button class="btn secondary" onclick="toggleDropdown(this)">Actions <i class='fa-solid fa-chevron-down' style='margin-left:8px;font-size:12px;'></i></button>
+                    <div class="dropdown-menu">
+                      <button onclick="viewPatient(this)">View</button>
+                      <button onclick="messagePatient(this)">Message</button>
+                      <button onclick="deletePatient(this)">Remove</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <!-- CHAT (Admin <-> Doctor) -->
+        <div class="card" id="chatSection" style="display:none">
+          <div class="card-head">
+            <h3 style="color:var(--primary)">Admin Chat with Doctors</h3>
+            <div><a class="small-link" href="chat.html">Open full Chat page</a></div>
+          </div>
+
+          <div class="chat-wrapper">
+            <aside class="chat-list" id="adminDoctorList">
+              <div class="chat-item active" data-name="Dr. Maria Santos" onclick="selectDoc(this)">
+                <img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e" style="width:40px;height:40px;border-radius:50%;object-fit:cover">
+                <div>
+                  <div style="font-weight:700;color:var(--primary)">Dr. Maria Santos</div>
+                  <div style="font-size:13px;color:var(--muted)">Family Medicine</div>
+                </div>
+              </div>
+
+              <div class="chat-item" data-name="Dr. John Reyes" onclick="selectDoc(this)">
+                <img src="https://images.unsplash.com/photo-1544005313-94ddf0286df2" style="width:40px;height:40px;border-radius:50%;object-fit:cover">
+                <div>
+                  <div style="font-weight:700;color:var(--primary)">Dr. John Reyes</div>
+                  <div style="font-size:13px;color:var(--muted)">Pediatrics</div>
+                </div>
+              </div>
+
+              <div class="chat-item" data-name="Dr. Anne Cruz" onclick="selectDoc(this)">
+                <img src="https://images.unsplash.com/photo-1550831107-1553da8c8464" style="width:40px;height:40px;border-radius:50%;object-fit:cover">
+                <div>
+                  <div style="font-weight:700;color:var(--primary)">Dr. Anne Cruz</div>
+                  <div style="font-size:13px;color:var(--muted)">Dermatology</div>
+                </div>
+              </div>
+            </aside>
+
+            <section class="chat-area">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding-bottom:8px;border-bottom:1px solid #eef3fa">
+                <div>
+                  <div id="chatWith" style="font-weight:700;color:var(--primary)">Dr. Maria Santos</div>
+                  <div style="font-size:13px;color:var(--muted)">Admin conversation</div>
+                </div>
+                <div><a class="small-link" href="#">View Profile</a></div>
+              </div>
+
+              <div class="chat-box" id="adminChatBox">
+                <div class="msg admin">
+                  <div>Hi Doc, can you confirm appointment for John Doe tomorrow?</div>
+                  <div class="msg-time">Oct 21, 2025 — 4:12 PM</div>
+                </div>
+                <div class="msg doc">
+                  <div>Confirmed. I'll be there — please have patient bring previous records.</div>
+                  <div class="msg-time">Oct 21, 2025 — 4:15 PM</div>
+                </div>
+              </div>
+
+              <form class="chat-input" id="adminChatForm" onsubmit="return false">
+                <input id="adminChatInput" placeholder="Type a message..." autocomplete="off" required />
+                <button id="adminSendBtn"><i class="fa-solid fa-paper-plane"></i></button>
+              </form>
+            </section>
+          </div>
+        </div>
+
+        <!-- APPOINTMENTS -->
+        <div class="card" id="appointmentsSection" style="display:none">
+          <div class="card-head">
+            <h3 style="color:var(--primary)">Appointments</h3>
+            <div><a class="small-link" href="appointment.html">Open Patient Booking</a></div>
+          </div>
+
+          <table class="table" id="appointmentsTable">
+            <thead>
+              <tr><th>Patient</th><th>Doctor</th><th>Date</th><th>Time</th><th>Status</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+              <tr data-id="a1">
+                <td>John Doe</td>
+                <td>Dr. Maria Santos</td>
+                <td>Oct 23, 2025</td>
+                <td>10:30 AM</td>
+                <td><span class="status-badge pending">Pending</span></td>
+                <td>
+                  <div class="action-dropdown">
+                    <button class="btn secondary" onclick="toggleDropdown(this)">Manage <i class='fa-solid fa-chevron-down' style='margin-left:8px;font-size:12px;'></i></button>
+                    <div class="dropdown-menu">
+                      <button onclick="appointmentAction(this,'accept')">Accept</button>
+                      <button onclick="appointmentAction(this,'decline')">Decline</button>
+                      <button onclick="appointmentAction(this,'reschedule')">Reschedule</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+
+              <tr data-id="a2">
+                <td>Jane Reyes</td>
+                <td>Dr. John Reyes</td>
+                <td>Oct 25, 2025</td>
+                <td>02:00 PM</td>
+                <td><span class="status-badge pending">Pending</span></td>
+                <td>
+                  <div class="action-dropdown">
+                    <button class="btn secondary" onclick="toggleDropdown(this)">Manage <i class='fa-solid fa-chevron-down' style='margin-left:8px;font-size:12px;'></i></button>
+                    <div class="dropdown-menu">
+                      <button onclick="appointmentAction(this,'accept')">Accept</button>
+                      <button onclick="appointmentAction(this,'decline')">Decline</button>
+                      <button onclick="appointmentAction(this,'reschedule')">Reschedule</button>
+                    </div>
+                  </div>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </section>
+    </div>
+  </div>
+
+  <!-- ===== JavaScript: Interactions + Animated Charts ===== -->
+  <script>
+    // ===== Utilities =====
+    function qs(sel, root=document) { return root.querySelector(sel) }
+    function qsa(sel, root=document) { return Array.from(root.querySelectorAll(sel)) }
+
+    // ===== Sidebar nav switch (hiwalay sections) =====
+    const sideItems = qsa('.side-item');
+    const sections = {
+      dashboard: qs('#dashboardSection'),
+      manage: qs('#manageSection'),
+      chat: qs('#chatSection'),
+      appointments: qs('#appointmentsSection')
+    };
+    sideItems.forEach(si=>{
+      si.addEventListener('click', ()=>{
+        sideItems.forEach(s=>s.classList.remove('active'));
+        si.classList.add('active');
+        const key = si.dataset.section;
+        Object.values(sections).forEach(sec=>sec.style.display='none');
+        sections[key].style.display = 'block';
+        // trigger chart animation on dashboard show
+        if(key === 'dashboard') startCharts();
+      })
+    });
+
+    // ===== Profile dropdown =====
+    const profileMenu = qs('#profileMenu');
+    const profileDropdown = qs('#profileDropdown');
+    const caret = profileMenu.querySelector('.caret');
+    profileMenu.addEventListener('click', e=>{
+      e.stopPropagation();
+      profileDropdown.classList.toggle('show');
+      caret.style.transform = profileDropdown.classList.contains('show') ? 'rotate(180deg)' : 'rotate(0deg)';
+    });
+    document.addEventListener('click', ()=>{ profileDropdown.classList.remove('show'); caret.style.transform='rotate(0deg)'; });
+
+    // ===== Action dropdown toggles =====
+    window.toggleDropdown = function(btn){
+      const menu = btn.nextElementSibling;
+      document.querySelectorAll('.dropdown-menu').forEach(m => { if(m!==menu) m.classList.remove('show') });
+      menu.classList.toggle('show');
+      // close if click outside
+      setTimeout(()=>{ document.addEventListener('click', function onDoc(e){ if(!menu.contains(e.target) && e.target!==btn){ menu.classList.remove('show'); document.removeEventListener('click', onDoc) } }) }, 10)
+    }
+
+    // ===== Patients & Doctors actions =====
+    qsa('#doctorsTable button').forEach(btn=>{
+      btn.addEventListener('click', e=>{
+        const tr = btn.closest('tr');
+        const name = tr.children[0].textContent;
+        const action = btn.dataset.action;
+        if(action === 'accept'){
+          tr.querySelector('td:nth-child(3)').innerHTML = '<span class="status-badge approved">Active</span>';
+          alert(name + ' accepted.');
+          // update counter
+          const doctorsCount = parseInt(qs('#statDoctors').textContent) || 0;
+          qs('#statDoctors').textContent = doctorsCount;
+        } else if(action === 'remove'){
+          if(confirm('Remove ' + name + ' permanently?')){
+            tr.remove();
+            alert(name + ' removed.');
+            // update counter decrement
+            const doctorsCount = parseInt(qs('#statDoctors').textContent) || 1;
+            qs('#statDoctors').textContent = Math.max(0, doctorsCount - 1);
+          }
+        }
+      })
+    });
+
+    // patient action handlers
+    window.viewPatient = function(btn){ alert('Open patient profile (demo)') }
+    window.messagePatient = function(btn){ alert('Open chat to patient (demo)') }
+    window.deletePatient = function(btn){
+      const tr = btn.closest('tr');
+      const name = tr.children[0].textContent;
+      if(confirm('Remove patient ' + name + '?')) { tr.remove(); alert('Removed ' + name) }
+    }
+
+    // ===== Admin chat (simple mock) =====
+    function selectDoc(el){
+      qsa('.chat-item').forEach(i=>i.classList.remove('active'));
+      el.classList.add('active');
+      qs('#chatWith').textContent = el.dataset.name;
+      qs('#adminChatBox').scrollTop = qs('#adminChatBox').scrollHeight;
+    }
+    qs('#adminChatForm').addEventListener('submit', (e)=>{
+      e.preventDefault();
+      const txt = qs('#adminChatInput').value.trim();
+      if(!txt) return;
+      const div = document.createElement('div'); div.className='msg admin';
+      div.innerHTML = '<div>'+escapeHtml(txt)+'</div><div class="msg-time">Just now</div>';
+      qs('#adminChatBox').appendChild(div);
+      qs('#adminChatInput').value = '';
+      qs('#adminChatBox').scrollTop = qs('#adminChatBox').scrollHeight;
+      setTimeout(()=>{ // fake doctor reply
+        const reply = document.createElement('div'); reply.className='msg doc';
+        reply.innerHTML = '<div>Got it — noted. Thanks.</div><div class="msg-time">Just now</div>';
+        qs('#adminChatBox').appendChild(reply);
+        qs('#adminChatBox').scrollTop = qs('#adminChatBox').scrollHeight;
+      },700);
+    });
+    qs('#adminSendBtn').addEventListener('click', (e)=>{ e.preventDefault(); qs('#adminChatForm').dispatchEvent(new Event('submit')) })
+
+    // ===== Appointments actions =====
+    window.appointmentAction = function(btn, act){
+      const tr = btn.closest('tr');
+      const id = tr.dataset.id || '';
+      const patient = tr.children[0].textContent;
+      const statusCell = tr.children[4];
+      if(act === 'accept'){
+        statusCell.innerHTML = '<span class="status-badge approved">Approved</span>';
+        alert('Appointment for ' + patient + ' approved.');
+      } else if(act === 'decline'){
+        statusCell.innerHTML = '<span class="status-badge declined">Declined</span>';
+        alert('Appointment for ' + patient + ' declined.');
+      } else if(act === 'reschedule'){
+        const newDate = prompt('Enter new date/time (example: Oct 28, 2025 — 10:00 AM)');
+        if(newDate){ tr.children[2].textContent = newDate.split('—')?.[0]?.trim() || tr.children[2].textContent; tr.children[3].textContent = newDate.split('—')?.[1]?.trim() || tr.children[3].textContent; alert('Appointment rescheduled') }
+      }
+      // close dropdown
+      qsa('.dropdown-menu').forEach(m=>m.classList.remove('show'));
+    }
+
+    // ===== small helpers =====
+    function escapeHtml(s){ return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":"&#39;"}[c])) }
+
+    // ===== Dark mode toggle (simple) =====
+    const darkToggle = qs('#darkToggle');
+    let dark=false;
+    darkToggle.addEventListener('click', ()=>{
+      dark = !dark;
+      if(dark){
+        document.documentElement.style.setProperty('--bg','#0f1724');
+        document.documentElement.style.setProperty('--card','#0b1220');
+        document.documentElement.style.setProperty('--primary','#8fb3e6');
+        document.documentElement.style.setProperty('--accent','#3a89d6');
+        document.documentElement.style.setProperty('--muted','#9aa6bf');
+        darkToggle.innerHTML = '<i class="fa-solid fa-sun"></i>';
+        document.body.style.color = '#e6eef8';
+      } else {
+        document.documentElement.style.setProperty('--bg','#f5f8fb');
+        document.documentElement.style.setProperty('--card','#ffffff');
+        document.documentElement.style.setProperty('--primary','#1f4e79');
+        document.documentElement.style.setProperty('--accent','#2a6fb0');
+        document.documentElement.style.setProperty('--muted','#6b7280');
+        darkToggle.innerHTML = '<i class="fa-solid fa-moon"></i>';
+        document.body.style.color = '#111827';
+      }
+    });
+
+    // ===== Animated Charts (Bar, Pie, Line) =====
+    // Data (example)
+    const barData = [12, 18, 9, 20, 15, 22, 10];
+    const barLabels = ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
+    const lineData = [8, 12, 11, 18, 14, 20, 16];
+    const pieData = [24,156];
+    const pieLabels = ['Doctors','Patients'];
+
+    // canvases
+    const barCanvas = qs('#barChart'); const barCtx = barCanvas.getContext('2d');
+    const pieCanvas = qs('#pieChart'); const pieCtx = pieCanvas.getContext('2d');
+    const lineCanvas = qs('#lineChart'); const lineCtx = lineCanvas.getContext('2d');
+
+    // responsive canvas sizing helper
+    function sizeCanvas(canvas, desiredW, desiredH){
+      const ratio = window.devicePixelRatio || 1;
+      const cssW = canvas.clientWidth;
+      const cssH = canvas.clientHeight;
+      canvas.width = Math.floor(cssW * ratio);
+      canvas.height = Math.floor(cssH * ratio);
+      canvas.getContext('2d').scale(ratio, ratio);
+    }
+
+    // Bar chart animation
+    let barProgress=0;
+    function drawBar(){
+      sizeCanvas(barCanvas);
+      const ctx = barCtx;
+      const w = barCanvas.clientWidth;
+      const h = barCanvas.clientHeight;
+      ctx.clearRect(0,0,w,h);
+      const maxVal = Math.max(...barData) * 1.2;
+      const marginLeft = 30;
+      const gap = Math.max(12, (w - marginLeft*2) / (barData.length * 1.8));
+      const barW = Math.max(18, (w - marginLeft*2) / (barData.length) - gap);
+
+      // axes labels
+      ctx.font = '12px Poppins';
+      ctx.fillStyle = 'rgba(0,0,0,0.6)';
+      barData.forEach((val,i)=>{
+        const x = marginLeft + i*(barW + gap);
+        const targetH = (val / maxVal) * (h - 60);
+        const curH = targetH * barProgress;
+        // shadow/fill
+        ctx.fillStyle = '#1f4e79';
+        roundRect(ctx, x, h - curH - 30, barW, curH, 6, true, false);
+        // label
+        ctx.fillStyle = '#222';
+        ctx.fillText(barLabels[i], x + barW/4, h - 8);
+        // animated number on top
+        ctx.fillText(Math.round(val * barProgress), x + barW/4, h - curH - 36);
+      });
+    }
+
+    // rounded rect helper
+    function roundRect(ctx,x,y,w,h,r,fill,stroke){
+      if (typeof r === 'undefined') r=6;
+      ctx.beginPath();
+      ctx.moveTo(x+r,y);
+      ctx.arcTo(x+w,y,x+w,y+h,r);
+      ctx.arcTo(x+w,y+h,x,y+h,r);
+      ctx.arcTo(x,y+h,x,y,r);
+      ctx.arcTo(x,y,x+w,y,r);
+      ctx.closePath();
+      if(fill){ctx.fill()} if(stroke){ctx.stroke()}
+    }
+
+    // Pie chart animation (rotation + fill)
+    let pieAngle = 0;
+    function drawPie(){
+      sizeCanvas(pieCanvas);
+      const ctx = pieCtx;
+      const w = pieCanvas.clientWidth;
+      const h = pieCanvas.clientHeight;
+      ctx.clearRect(0,0,w,h);
+      const centerX = w/2, centerY = h/2, radius = Math.min(w,h)/2 - 20;
+      const total = pieData.reduce((a,b)=>a+b,0);
+      let start = -Math.PI/2 + pieAngle;
+      pieData.forEach((val,i)=>{
+        const slice = (val/total) * 2 * Math.PI;
+        ctx.beginPath();
+        ctx.moveTo(centerX,centerY);
+        ctx.arc(centerX,centerY,radius,start,start+slice);
+        ctx.closePath();
+        ctx.fillStyle = i===0 ? '#1f4e79' : '#cfd9f7';
+        ctx.fill();
+        start += slice;
+      });
+      // legend
+      qs('#pieLegend').innerHTML = `<div style="display:flex;gap:8px;align-items:center"><div style="width:12px;height:12px;background:#1f4e79;border-radius:3px"></div><small style="color:var(--muted)">${pieLabels[0]}: ${pieData[0]}</small></div>
+      <div style="display:flex;gap:8px;align-items:center;margin-top:6px"><div style="width:12px;height:12px;background:#cfd9f7;border-radius:3px"></div><small style="color:var(--muted)">${pieLabels[1]}: ${pieData[1]}</small></div>`;
+    }
+
+    // Line chart animation (draw path)
+    let lineProgress = 0;
+    function drawLine(){
+      sizeCanvas(lineCanvas);
+      const ctx = lineCtx;
+      const w = lineCanvas.clientWidth;
+      const h = lineCanvas.clientHeight;
+      ctx.clearRect(0,0,w,h);
+      // coords
+      const padding = 20;
+      const maxV = Math.max(...lineData) * 1.2;
+      const step = (w - padding*2) / (lineData.length - 1);
+      ctx.beginPath(); ctx.lineWidth = 2.5; ctx.strokeStyle = '#1f4e79';
+      lineData.forEach((v,i)=>{
+        const x = padding + i * step;
+        const y = h - padding - (v / maxV) * (h - padding*2);
+        if(i===0) ctx.moveTo(x,y);
+        else ctx.lineTo(x,y);
+      });
+      // stroke path partially using dash trick
+      const totalLen = ctx.measureText ? 1 : 1; // placeholder
+      ctx.setLineDash([1000]);
+      ctx.lineDashOffset = 1000 * (1 - lineProgress);
+      ctx.stroke();
+      // draw points
+      lineData.forEach((v,i)=>{
+        const x = padding + i * step;
+        const y = h - padding - (v / maxV) * (h - padding*2);
+        ctx.beginPath(); ctx.arc(x,y,4,0,Math.PI*2); ctx.fillStyle = '#fff'; ctx.fill();
+        ctx.strokeStyle = '#1f4e79'; ctx.lineWidth = 2; ctx.stroke();
+      });
+    }
+
+    // anim loop control
+    let chartsStarted=false;
+    function startCharts(){
+      if(chartsStarted) return;
+      chartsStarted=true;
+      barProgress = 0; pieAngle = 0; lineProgress = 0;
+      function loop(){
+        // bar
+        if(barProgress < 1){ barProgress += 0.02; drawBar(); }
+        else drawBar();
+        // pie rotate until full
+        if(pieAngle < Math.PI*2){ pieAngle += 0.04; drawPie(); } else drawPie();
+        // line draw
+        if(lineProgress < 1){ lineProgress += 0.02; drawLine(); } else drawLine();
+        if(barProgress < 1 || pieAngle < Math.PI*2 || lineProgress < 1) requestAnimationFrame(loop);
+      }
+      requestAnimationFrame(loop);
+    }
+
+    // start charts on load
+    window.addEventListener('load', ()=>{
+      startCharts();
+      // ensure canvas sizes correct after fonts load
+      setTimeout(()=>{ drawBar(); drawPie(); drawLine() },200);
+    });
+    window.addEventListener('resize', ()=>{ drawBar(); drawPie(); drawLine(); })
+      const logoutBtn = document.querySelector(".logout");
+  logoutBtn.addEventListener("click", (e) => {
+    e.preventDefault();
+    alert("You have been logged out.");
+   window.location.href = "../index.html";
+  });
+
+  </script>
+</body>
+</html>

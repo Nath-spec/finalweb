@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Doctor — Appointments</title>
+  <link rel="stylesheet" href="doctor.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+  <header class="topnav">
+    <div class="nav-inner">
+      <div class="brand"><span class="brand-mark">+</span><span class="brand-text">CliniCare</span></div>
+      <nav class="nav-links">
+        <a href="doctor.html" class="nav-link">Dashboard</a>
+        <a href="doctor-appointments.html" class="nav-link active">Appointments</a>
+        <a href="doctor-chat.html" class="nav-link">Chats</a>
+      </nav>
+      <div class="nav-right">
+        <div class="profile" id="profileToggle">
+          <img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e" alt="Doctor" class="avatar">
+          <span class="name">Dr. Jane Cruz</span>
+          <i class="fa-solid fa-chevron-down caret"></i>
+          <ul class="profile-dropdown" id="profileDropdown">
+            <li><a href="profile.html"><i class="fa-solid fa-user"></i> Profile</a></li>
+            <li><a href="../index.html" class="logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="card">
+      <div class="card-head"><h2>Pending Appointments</h2></div>
+      <table class="appt-table">
+        <thead>
+          <tr><th>Patient</th><th>Date</th><th>Time</th><th>Reason</th><th>Action</th></tr>
+        </thead>
+        <tbody id="apptTable">
+          <tr>
+            <td>John Doe</td><td>Oct 22, 2025</td><td>10:30 AM</td><td>Fever & body pain</td>
+            <td>
+              <button class="btn-accept">Accept</button>
+              <button class="btn-decline">Decline</button>
+            </td>
+          </tr>
+          <tr>
+            <td>Mary Cruz</td><td>Oct 23, 2025</td><td>1:00 PM</td><td>Follow-up Consultation</td>
+            <td>
+              <button class="btn-accept">Accept</button>
+              <button class="btn-decline">Decline</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </section>
+  </main>
+
+  <script src="doctor.js"></script>
+</body>
+</html>

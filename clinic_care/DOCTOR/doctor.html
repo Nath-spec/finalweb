@@ -1,0 +1,76 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CliniCare — Doctor Dashboard</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="doctor.css" />
+</head>
+<body>
+  <!-- NAV -->
+  <header class="topnav">
+    <div class="nav-inner">
+      <div class="brand"><span class="brand-mark">+</span><span class="brand-text">CliniCare</span></div>
+
+      <nav class="nav-links">
+        <a href="doctor.html" class="nav-link active">Dashboard</a>
+        <a href="doctor-appointments.html" class="nav-link">Appointments</a>
+        <a href="doctor-chat.html" class="nav-link">Chats</a>
+      </nav>
+
+      <div class="nav-right">
+        <div class="profile" id="profileToggle">
+          <img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e" alt="Doctor" class="avatar">
+          <span class="name">Dr. Jane Cruz</span>
+          <i class="fa-solid fa-chevron-down caret"></i>
+          <ul class="profile-dropdown" id="profileDropdown">
+            <li><a href="profile.html"><i class="fa-solid fa-user"></i> Profile</a></li>
+            <li><a href="../index.html" class="logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- DASHBOARD -->
+  <main class="container">
+    <section class="card welcome">
+      <div>
+        <h1>Welcome back, <span style="color:var(--accent)">Dr. Jane</span> 👋</h1>
+        <p>Here’s a quick overview of your day — upcoming appointments and patient messages at a glance.</p>
+        <div class="actions">
+          <a href="doctor-appointments.html" class="btn primary"><i class="fa-solid fa-calendar"></i> View Appointments</a>
+          <a href="doctor-chat.html" class="btn outline"><i class="fa-solid fa-comments"></i> Chat with Patients</a>
+        </div>
+      </div>
+      <img src="/Users/sandy/Downloads/clinic_care/PICTURES/ChatGPT Image Oct 16, 2025, 04_40_28 PM.png" alt="Doctor" class="hero-img">
+    </section>
+
+    <section class="card">
+      <div class="card-head"><h2>Today's Appointments</h2><a href="doctor-appointments.html" class="small-link">View All</a></div>
+      <div class="appt-list">
+        <div class="appt">
+          <div class="appt-info">
+            <h3>John Doe</h3>
+            <p class="muted small">10:00 AM — Fever and body pain</p>
+          </div>
+          <span class="badge confirmed">Confirmed</span>
+        </div>
+
+        <div class="appt">
+          <div class="appt-info">
+            <h3>Mary Cruz</h3>
+            <p class="muted small">11:30 AM — Follow-up Consultation</p>
+          </div>
+          <span class="badge pending">Pending</span>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script src="doctor.js"></script>
+</body>
+</html>

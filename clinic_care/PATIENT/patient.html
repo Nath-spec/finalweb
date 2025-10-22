@@ -1,0 +1,94 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CliniCare — Patient Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="patient.css" />
+  <script defer src="patient.js"></script>
+</head>
+<body>
+  <!-- TOP NAV -->
+  <header class="topnav">
+    <div class="nav-inner">
+      <div class="brand">
+        <span class="brand-mark">+</span><span class="brand-text">CliniCare</span>
+      </div>
+
+      <nav class="nav-links">
+        <a href="patient.html"class="nav-link active">Home</a>
+        <a href="chat.html" class="nav-link">Chat</a>
+        <a href="appointment.html" class="nav-link">Book Appointment</a>
+        <a href="record.html" class="nav-link">Records</a>
+      </nav>
+
+      <div class="nav-right">
+  <div class="profile" id="profileMenu">
+    <img src="/Users/sandy/Downloads/clinic_care/PICTURES/d6f7040848c96a34966b9614e687effd.jpg" alt="User avatar" class="avatar">
+    <span class="name">John Doe</span>
+    <i class="fa-solid fa-chevron-down caret"></i>
+    <ul class="profile-dropdown" id="profileDropdown">
+      <li><a href="profile.html"><i class="fa-solid fa-user"></i> Profile</a></li>
+      <li><a href="#" class="logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a></li>
+    </ul>
+  </div>
+</div>
+
+    </div>
+  </header>
+
+  <!-- MAIN CONTENT -->
+  <main class="container">
+    <section class="card welcome">
+      <div>
+        <h1>Welcome back, John! 👋</h1>
+        <p>Manage appointments, chat with your doctor, and view your medical records — all in one place.</p>
+        <div class="actions">
+          <a href="appointment.html" class="btn primary">Book Appointment</a>
+          <a href="view-record.html" class="btn outline">View Records</a>
+        </div>
+      </div>
+      <img src="/Users/sandy/Downloads/clinic_care/PICTURES/ChatGPT Image Oct 16, 2025, 04_40_28 PM.png" alt="Clinic" class="hero-img">
+    </section>
+
+    <section class="card">
+      <div class="card-head">
+        <h2>Your Upcoming Appointments</h2>
+        <a href="#" class="small-link">Manage</a>
+      </div>
+
+      <div class="appt-list">
+        <div class="appt">
+          <div class="appt-info">
+            <h3>Dr. Maria Santos</h3>
+            <p class="muted small">Family Medicine</p>
+            <p class="muted small">Oct 20, 2025 — 10:00 AM</p>
+          </div>
+          <div class="appt-actions">
+            <span class="badge confirmed">Confirmed</span>
+            <a href="chat.html" class="icon-btn"><i class="fa-solid fa-message"></i></a>
+          </div>
+        </div>
+
+        <div class="appt">
+          <div class="appt-info">
+            <h3>Dr. John Reyes</h3>
+            <p class="muted small">Pediatrics</p>
+            <p class="muted small">Oct 25, 2025 — 2:00 PM</p>
+          </div>
+          <div class="appt-actions">
+            <span class="badge pending">Pending</span>
+            <a href="chat.html" class="icon-btn"><i class="fa-solid fa-message"></i></a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <p>© 2025 CliniCare. All rights reserved.</p>
+  </footer>
+</body>
+</html>

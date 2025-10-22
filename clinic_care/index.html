@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ClinicCare — Your Health, Our Priority</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- NAVBAR -->
+  <header>
+    <h1>ClinicCare</h1>
+    <nav>
+      <a href="#home">Home</a>
+      <a href="#doctors">Doctors</a>
+      <a href="#about">About</a>
+      <a href="#" id="bookBtn">Book Appointment</a>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+<section class="hero" id="home">
+  <div class="content">
+    <h2>Welcome to ClinicCare</h2>
+    <p>Your trusted partner in health and wellness — book your appointment today.</p>
+    <button id="bookNow">Book Appointment</button>
+  </div>
+</section>
+
+
+
+  <!-- ABOUT -->
+  <section class="about" id="about">
+    <h2>About Us</h2>
+    <p>ClinicCare is a modern digital platform that connects patients with healthcare providers for hassle-free consultation and appointment booking. Our mission is to make healthcare more accessible and efficient for everyone.</p>
+  </section>
+
+  <!-- DOCTORS -->
+  <section class="doctors" id="doctors">
+    <h2>Our Doctors</h2>
+    <div class="doctor-cards">
+      <div class="doctor">
+        <img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e" alt="Doctor">
+        <h3>Dr. Jane Cruz</h3>
+        <p>Cardiologist</p>
+      </div>
+      <div class="doctor">
+        <img src="/Users/sandy/Downloads/d6f7040848c96a34966b9614e687effd.jpg" alt="Doctor">
+        <h3>Dr. John Doe</h3>
+        <p>General Physician</p>
+      </div>
+      <div class="doctor">
+        <img src="https://images.unsplash.com/photo-1550831107-1553da8c8464" alt="Doctor">
+        <h3>Dr. Engelbert Cruz</h3>
+        <p>Pediatrician</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <h3>ClinicCare</h3>
+    <p>© 2025 ClinicCare | All Rights Reserved</p>
+    <p>Email: info@cliniccare.com | Contact: +63 900 123 4567</p>
+  </footer>
+
+  <!-- LOGIN/REGISTER MODAL -->
+  <div class="modal" id="authModal">
+    <div class="modal-content" id="loginForm">
+      <h2>Login</h2>
+      <input type="text" placeholder="Username" id="username">
+      <input type="password" placeholder="Password" id="password">
+      <button class="Login" id="loginBtn">Login</button>
+      <div class="toggle" id="toRegister">Don’t have an account? Register</div>
+    </div>
+
+    <div class="modal-content" id="registerForm" style="display:none;">
+      <h2>Register</h2>
+      <input type="text" placeholder="Full Name">
+      <input type="text" placeholder="Username">
+      <input type="email" placeholder="Email">
+      <input type="password" placeholder="Password">
+      <button>Register</button>
+      <div class="toggle" id="toLogin">Already have an account? Login</div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

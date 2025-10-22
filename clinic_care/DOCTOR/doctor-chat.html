@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Doctor — Chat</title>
+  <link rel="stylesheet" href="doctor.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+</head>
+<body>
+  <header class="topnav">
+    <div class="nav-inner">
+      <div class="brand"><span class="brand-mark">+</span><span class="brand-text">CliniCare</span></div>
+      <nav class="nav-links">
+        <a href="doctor.html" class="nav-link">Dashboard</a>
+        <a href="doctor-appointments.html" class="nav-link">Appointments</a>
+        <a href="doctor-chat.html" class="nav-link active">Chats</a>
+      </nav>
+      <div class="nav-right">
+        <div class="profile" id="profileToggle">
+          <img src="https://images.unsplash.com/photo-1607746882042-944635dfe10e" alt="Doctor" class="avatar">
+          <span class="name">Dr. Jane Cruz</span>
+          <i class="fa-solid fa-chevron-down caret"></i>
+          <ul class="profile-dropdown" id="profileDropdown">
+            <li><a href="profile.html"><i class="fa-solid fa-user"></i> Profile</a></li>
+            <li><a href="../index.html" class="logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container chat-container">
+    <aside class="chat-list">
+      <div class="chat-item active" onclick="selectPatient(this, 'John Doe')">
+        <img src="https://i.pravatar.cc/100?u=john" alt="">
+        <div class="chat-info"><h4>John Doe</h4><p>Last message...</p></div>
+        <span class="notif-bubble">1</span>
+      </div>
+      <div class="chat-item" onclick="selectPatient(this, 'Mary Cruz')">
+        <img src="https://i.pravatar.cc/100?u=mary" alt="">
+        <div class="chat-info"><h4>Mary Cruz</h4><p>Follow-up update</p></div>
+      </div>
+    </aside>
+
+    <section class="chat-area">
+      <div class="chat-top">
+        <h3 id="chatWith">John Doe</h3>
+      </div>
+
+      <div class="chat-box" id="chatBox">
+        <div class="msg patient"><div class="msg-text">Good morning, Doc!</div><div class="msg-time">9:15 AM</div></div>
+        <div class="msg doctor"><div class="msg-text">Hi John, how are you feeling?</div><div class="msg-time">9:16 AM</div></div>
+      </div>
+
+      <form class="chat-input" id="chatForm">
+        <input type="text" id="chatInput" placeholder="Type a message..." autocomplete="off" required>
+        <button type="submit"><i class="fa-solid fa-paper-plane"></i></button>
+      </form>
+    </section>
+  </main>
+
+  <script src="doctor.js"></script>
+</body>
+</html>

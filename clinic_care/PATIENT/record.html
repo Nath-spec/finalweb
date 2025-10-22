@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CliniCare — Records</title>
+
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+  <link rel="stylesheet" href="patient.css"/>
+  <script src="patient.js" defer></script>
+
+  <style>
+    /* Page layout */
+    .records-container {
+      padding: 30px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+    .record-card {
+      background: var(--card);
+      padding: 22px;
+      border-radius: var(--radius);
+      box-shadow: 0 8px 24px rgba(20,30,50,0.06);
+      transition: 0.2s;
+    }
+    .record-card:hover {
+      transform: scale(1.01);
+      box-shadow: 0 8px 28px rgba(20,30,50,0.1);
+    }
+    .record-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #eef2f7;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+    .record-header h3 {
+      margin: 0;
+      color: var(--primary);
+      font-size: 17px;
+    }
+    .record-date {
+      font-size: 13px;
+      color: var(--muted);
+    }
+    .record-body p {
+      margin: 6px 0;
+      font-size: 15px;
+      color: var(--muted);
+    }
+    .status {
+      padding: 4px 10px;
+      border-radius: 6px;
+      font-size: 13px;
+      font-weight: 600;
+    }
+    .completed { background: #dcfce7; color: #166534; }
+    .pending { background: #fef3c7; color: #92400e; }
+    .cancelled { background: #fee2e2; color: #991b1b; }
+    .record-actions {
+      margin-top: 10px;
+      display: flex;
+      gap: 10px;
+    }
+    .record-actions button {
+      background: var(--primary);
+      color: white;
+      border: 0;
+      padding: 8px 14px;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: 0.2s;
+      font-size: 14px;
+    }
+    .record-actions button:hover {
+      background: var(--accent);
+      transform: scale(1.05);
+    }
+  </style>
+</head>
+<body>
+  <!-- TOP NAV -->
+  <header class="topnav">
+    <div class="nav-inner">
+      <div class="brand">
+        <span class="brand-mark">+</span>
+        <span class="brand-text">CliniCare</span>
+      </div>
+
+      <nav class="nav-links">
+        <a href="patient.html" class="nav-link">Home</a>
+        <a href="chat.html" class="nav-link">Chat</a>
+        <a href="appointment.html" class="nav-link">Book Appointment</a>
+        <a href="record.html" class="nav-link active">Records</a>
+      </nav>
+
+      <div class="nav-right">
+  <div class="profile" id="profileMenu">
+    <img src="/Users/sandy/Downloads/clinic_care/PICTURES/d6f7040848c96a34966b9614e687effd.jpg" alt="User avatar" class="avatar">
+    <span class="name">John Doe</span>
+    <i class="fa-solid fa-chevron-down caret"></i>
+
+    <ul class="profile-dropdown" id="profileDropdown">
+      <li><a href="profile.html"><i class="fa-solid fa-user"></i> Profile</a></li>
+      <li><a href="#" class="logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Logout</a></li>
+    </ul>
+  </div>
+</div>
+
+    </div>
+  </header>
+
+  <!-- MAIN -->
+  <main class="container records-container">
+    <h2 style="color:var(--primary);margin-bottom:10px;">Your Medical Records</h2>
+
+    <!-- Record Card -->
+    <div class="record-card">
+      <div class="record-header">
+        <h3>Consultation with Dr. Maria Santos</h3>
+        <span class="record-date">Oct 10, 2025</span>
+      </div>
+      <div class="record-body">
+        <p><strong>Specialization:</strong> Family Medicine</p>
+        <p><strong>Diagnosis:</strong> Mild flu and dehydration</p>
+        <p><strong>Prescription:</strong> Paracetamol 500mg, Hydration & Rest</p>
+        <p><strong>Status:</strong> <span class="status completed">Completed</span></p>
+      </div>
+      <div class="record-actions">
+        <button><i class="fa-solid fa-file-pdf"></i> View Report</button>
+        <button><i class="fa-solid fa-download"></i> Download</button>
+      </div>
+    </div>
+
+    <!-- Record Card -->
+    <div class="record-card">
+      <div class="record-header">
+        <h3>Consultation with Dr. Anne Cruz</h3>
+        <span class="record-date">Oct 5, 2025</span>
+      </div>
+      <div class="record-body">
+        <p><strong>Specialization:</strong> Dermatology</p>
+        <p><strong>Diagnosis:</strong> Skin allergy due to detergent</p>
+        <p><strong>Prescription:</strong> Antihistamine & topical cream</p>
+        <p><strong>Status:</strong> <span class="status completed">Completed</span></p>
+      </div>
+      <div class="record-actions">
+        <button><i class="fa-solid fa-file-pdf"></i> View Report</button>
+        <button><i class="fa-solid fa-download"></i> Download</button>
+      </div>
+    </div>
+
+    <!-- Record Card -->
+    <div class="record-card">
+      <div class="record-header">
+        <h3>Appointment with Dr. John Reyes</h3>
+        <span class="record-date">Oct 18, 2025</span>
+      </div>
+      <div class="record-body">
+        <p><strong>Specialization:</strong> Pediatrics</p>
+        <p><strong>Diagnosis:</strong> —</p>
+        <p><strong>Prescription:</strong> —</p>
+        <p><strong>Status:</strong> <span class="status pending">Pending</span></p>
+      </div>
+      <div class="record-actions">
+        <button disabled style="opacity:.5;cursor:not-allowed;"><i class="fa-solid fa-file-lines"></i> Waiting...</button>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    // Optional JS (frontend only)
+    document.querySelectorAll('.record-actions button').forEach(btn => {
+      btn.addEventListener('click', () => {
+        alert('Feature coming soon!');
+      });
+    });
+  </script>
+</body>
+</html>
